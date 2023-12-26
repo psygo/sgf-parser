@@ -1,9 +1,11 @@
 import { SgfTree } from "./sgf_tree";
 
-/**
- * An SGF tree is basically a *trie* data structure encoded
- * in text.
- */
+// An SGF tree is basically a *trie* data structure encoded
+// in text.
+// 
+// I bet you could also do the whole parsing with only
+// Regexes. (I think I'm gonna create a Stack Overflow
+// question for this.)
 export function parseSgf(sgf: string) {
   // 1. Cleanup
   sgf = sgf
@@ -31,6 +33,7 @@ export function parseSgf(sgf: string) {
       case ")":
         // 3.2. Closing the Current Branch and Going Back to the
         //      Parent.
+        parseMovesAndMetadata(currentString);
         currentTree.data = currentString;
         currentTree = currentTree.parent!;
         currentString = currentTree.data;
@@ -43,8 +46,45 @@ export function parseSgf(sgf: string) {
   return trees.children;
 }
 
-function parseMovesAndMetadata(sgfData: string) {}
+export type SgfData = {
+  // 1. Metadata
+  GM?: "1"; // Game Type (GM = "1" is Go)
+  FF?: string; // File Format
+  CA?: string; // Character Set
+  AP?: string; // Application used to produce the file
+  // 2. Game Info
+  KM?: string; // Komi
+  SZ?: string; // Board Size
+  DT?: string; // Date
+  HA?: string; // Number of Handicap Stones
+  RU?: string; // Rules Set in Use
+  GN?: string; // Game Name
+  EV?: string; // Event
+  // 3. Players
+  PB?: string; // Black Player
+  BR?: string; // Black's Rating
+  PW?: string; // White Player
+  WR?: string; // White's Rating
+  // 4. Comments
+  C?: string; // (Move) Comments
+  GC?: string; // Game Comment
+  // 5. Editing the Goban
+  PL?: string; // Who plays next
+  AB?: string; // Add Black stones
+  AW?: string; // Add White stones
+  // 6. Moves
+  B?: string; // What Black plays
+  W?: string; // What White Plays
+};
 
+function parseMovesAndMetadata(sgfData: string) {
+  const metadataAndMoves = sgfData
+    .split(";")
+    .filter((m) => m !== "");
+  console.log(metadataAndMoves);
+}
+
+// Straight Branch
 const test1 = `
   (
     ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
@@ -54,6 +94,7 @@ const test1 = `
     ;W[dp]
   )
 `;
+// Two Branches
 const test2 = `
   (
     ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
@@ -69,6 +110,7 @@ const test2 = `
       )
   )
 `;
+// Two Branches + Added (Edited) Stones
 const test3 = `
   (
     ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
@@ -86,6 +128,7 @@ const test3 = `
       )
   )
 `;
+// Two Branches + Added (Edited) Stones + Comments
 const test4 = `
   (
     ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
@@ -108,4 +151,4 @@ const sgf = parseSgf(test4);
 const sgfAsJSON = sgf.map((c) => c.toJSON());
 const prettyPrintSgf = JSON.stringify(sgfAsJSON, null, 2);
 
-console.log(prettyPrintSgf);
+// console.log(prettyPrintSgf);

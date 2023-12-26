@@ -1,9 +1,8 @@
+// TODO: This should be its own package.
 export class SgfTree {
   constructor(
-    /**
-     * The pointer to the parent isn't really necessary, but
-     * it makes parsing much easier.
-     */
+    // The pointer to the parent isn't really necessary, but
+    // it makes parsing much easier.
     public parent?: SgfTree,
     public data: string = "",
     public children: SgfTree[] = []
@@ -15,4 +14,6 @@ export class SgfTree {
       children: this.children.map((c) => c.toJSON()),
     };
   }
+
+  // TODO: Stringify method, to transform it back to SGF.
 }
