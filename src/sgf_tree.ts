@@ -20,12 +20,15 @@ function parseSgf(sgf: string) {
 
   for (const char of sgf) {
     if (char === "(") {
+      currentTree.data = currentString
       const newTree = new SgfTree(currentTree)
       currentTree.children.push(newTree)
       currentTree = newTree
+      currentString = ""
     } else if (char === ")") {
       currentTree.data = currentString
       currentTree = currentTree.parent!
+      currentString = currentTree.data
     } else {
       currentString += char
     }
