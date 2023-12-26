@@ -1,5 +1,9 @@
 export class SgfTree {
   constructor(
+    /**
+     * The pointer to the parent isn't really necessary, but
+     * it makes parsing much easier.
+     */
     public parent?: SgfTree,
     public data: string = "",
     public children: SgfTree[] = []

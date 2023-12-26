@@ -1,5 +1,9 @@
 import { SgfTree } from "./sgf_tree";
 
+/**
+ * An SGF tree is basically a *trie* data structure encoded
+ * in text.
+ */
 function parseSgf(sgf: string) {
   // 1. Cleanup
   sgf = sgf
