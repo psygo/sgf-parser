@@ -2,7 +2,7 @@ import { SgfTree } from "./sgf_tree";
 
 // An SGF tree is basically a *trie* data structure encoded
 // in text.
-// 
+//
 // I bet you could also do the whole parsing with only
 // Regexes. (I think I'm gonna create a Stack Overflow
 // question for this.)
@@ -77,11 +77,17 @@ export type SgfData = {
   W?: string; // What White Plays
 };
 
+// TODO: Complete
 function parseMovesAndMetadata(sgfData: string) {
   const metadataAndMoves = sgfData
     .split(";")
     .filter((m) => m !== "");
-  console.log(metadataAndMoves);
+
+  const regex =
+    /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g;
+  const matches = [...metadataAndMoves[0].matchAll(regex)];
+
+  console.log(matches[0].groups!["value"]);
 }
 
 // Straight Branch
