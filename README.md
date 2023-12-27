@@ -11,3 +11,4 @@ My custom SGF parser.
   - [CWI - SGF Format](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
 - [Stack Overflow - How to Parse SGF Metadata with JS Regexes](https://stackoverflow.com/q/77717462/4756173)
 - [Stack Overflow - Recursive Regex for Parsing SGF with JS](https://stackoverflow.com/q/77718740/4756173)
+- [Peg.js - A package for parsing any grammar](https://pegjs.org/)
