@@ -1,4 +1,4 @@
-import { SgfTree } from "./sgf_tree";
+import { SgfTree } from "./sgf_tree"
 
 // An SGF tree is basically a *trie* data structure encoded
 // in text.
@@ -9,86 +9,89 @@ import { SgfTree } from "./sgf_tree";
 export function parseSgf(sgf: string) {
   // 1. Cleanup
   sgf = sgf
+    .trim()
     .replaceAll("\n", "")
     .replaceAll("\t", "")
     .replaceAll(" ", "")
-    .trim();
 
   // 2. Initialization
-  const trees = new SgfTree();
-  let currentTree: SgfTree = trees;
-  let currentString: string = "";
+  const trees = new SgfTree()
+  let currentTree: SgfTree = trees
+  let currentString: string = ""
 
   // 3. Flattened Recursion
   for (const char of sgf) {
     switch (char) {
       case "(":
         // 3.1. Opening a Branch
-        currentTree.data = currentString;
-        const newTree = new SgfTree(currentTree);
-        currentTree.children.push(newTree);
-        currentTree = newTree;
-        currentString = "";
-        break;
+        currentTree.data = currentString
+        const newTree = new SgfTree(currentTree)
+        currentTree.children.push(newTree)
+        currentTree = newTree
+        currentString = ""
+        break
       case ")":
         // 3.2. Closing the Current Branch and Going Back to the
         //      Parent.
-        parseMovesAndMetadata(currentString);
-        currentTree.data = currentString;
-        currentTree = currentTree.parent!;
-        currentString = currentTree.data;
-        break;
+        parseMovesAndMetadata(currentString)
+        currentTree.data = currentString
+        currentTree = currentTree.parent!
+        currentString = currentTree.data
+        break
       default:
-        currentString += char;
+        currentString += char
     }
   }
 
-  return trees.children;
+  return trees.children
 }
 
+// TODO: Complete, add all the fields.
 export type SgfData = {
   // 1. Metadata
-  GM?: "1"; // Game Type (GM = "1" is Go)
-  FF?: string; // File Format
-  CA?: string; // Character Set
-  AP?: string; // Application used to produce the file
+  GM?: "1" // Game Type (GM = "1" is Go)
+  FF?: string // File Format
+  CA?: string // Character Set
+  AP?: string // Application used to produce the file
   // 2. Game Info
-  KM?: string; // Komi
-  SZ?: string; // Board Size
-  DT?: string; // Date
-  HA?: string; // Number of Handicap Stones
-  RU?: string; // Rules Set in Use
-  GN?: string; // Game Name
-  EV?: string; // Event
+  KM?: string // Komi
+  SZ?: string // Board Size
+  DT?: string // Date
+  HA?: string // Number of Handicap Stones
+  RU?: string // Rules Set in Use
+  GN?: string // Game Name
+  EV?: string // Event
   // 3. Players
-  PB?: string; // Black Player
-  BR?: string; // Black's Rating
-  PW?: string; // White Player
-  WR?: string; // White's Rating
+  PB?: string // Black Player
+  BR?: string // Black's Rating
+  PW?: string // White Player
+  WR?: string // White's Rating
   // 4. Comments
-  C?: string; // (Move) Comments
-  GC?: string; // Game Comment
+  C?: string // (Move) Comments
+  GC?: string // Game Comment
   // 5. Editing the Goban
-  PL?: string; // Who plays next
-  AB?: string; // Add Black stones
-  AW?: string; // Add White stones
+  PL?: string // Who plays next
+  AB?: string // Add Black stones
+  AW?: string // Add White stones
   // 6. Moves
-  B?: string; // What Black plays
-  W?: string; // What White Plays
-};
+  B?: string // What Black plays
+  W?: string // What White Plays
+}
 
 // TODO: Complete
 function parseMovesAndMetadata(sgfData: string) {
   const metadataAndMoves = sgfData
     .split(";")
-    .filter((m) => m !== "");
+    .filter((m) => m !== "")
 
   const regex =
-    /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g;
-  const matches = [...metadataAndMoves[0].matchAll(regex)];
+    /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g
+  const matches = [...metadataAndMoves[0].matchAll(regex)]
 
-  console.log(matches[0].groups!["value"]);
+  console.log(matches[0].groups!["value"])
 }
+
+// TODO: Put these into tests.
 
 // Straight Branch
 const test1 = `
@@ -99,7 +102,7 @@ const test1 = `
     ;B[pq]
     ;W[dp]
   )
-`;
+`
 // Two Branches
 const test2 = `
   (
@@ -115,7 +118,7 @@ const test2 = `
         ;W[pp]
       )
   )
-`;
+`
 // Two Branches + Added (Edited) Stones
 const test3 = `
   (
@@ -133,7 +136,7 @@ const test3 = `
         ;B[jq]
       )
   )
-`;
+`
 // Two Branches + Added (Edited) Stones + Comments
 const test4 = `
   (
@@ -151,10 +154,10 @@ const test4 = `
         ;B[jq]
       )
   )
-`;
+`
 
-const sgf = parseSgf(test4);
-const sgfAsJSON = sgf.map((c) => c.toJSON());
-const prettyPrintSgf = JSON.stringify(sgfAsJSON, null, 2);
+const sgf = parseSgf(test4)
+const sgfAsJSON = sgf.map((c) => c.toJSON())
+const prettyPrintSgf = JSON.stringify(sgfAsJSON, null, 2)
 
 // console.log(prettyPrintSgf);
