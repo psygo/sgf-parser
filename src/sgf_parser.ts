@@ -157,7 +157,7 @@ const test4 = `
 `
 
 const sgf = parseSgf(test4)
-const sgfAsJSON = sgf.map((c) => c.toJSON())
+const sgfAsJSON = sgf.map((c) => c.toJson())
 const prettyPrintSgf = JSON.stringify(sgfAsJSON, null, 2)
 
 // console.log(prettyPrintSgf);

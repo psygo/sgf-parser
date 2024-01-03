@@ -14,10 +14,10 @@ export class SgfTree {
     public children: SgfTree[] = []
   ) {}
 
-  toJSON(): Json {
+  toJson(): Json {
     return {
       data: this.data,
-      children: this.children.map((c) => c.toJSON()),
+      children: this.children.map((c) => c.toJson()),
     }
   }
 
