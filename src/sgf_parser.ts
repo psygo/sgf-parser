@@ -156,8 +156,34 @@ const test4 = `
   )
 `
 
-const sgfTree = parseSgf(test4)
-const sgfTreeAsJSON = sgfTree.map((c) => c.toJson())
-const prettyPrintSgf = JSON.stringify(sgfTreeAsJSON, null, 2)
+// Nested Branches in 2 levels
+const test5 = `
+  (
+    ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2024-01-21]
+    ;B[dd]
+    ;W[pd]
+      (
+        ;B[dp]
+      )
+      (
+        ;B[dq]
+          (
+            ;W[pp]
+          )
+          (
+            ;W[co];B[pp]
+          )
+      )
+  )
+`
 
-console.log(prettyPrintSgf);
+const sgfTrees = parseSgf(test5)
+const sgfTreeAsJSON = sgfTrees.map((c) => c.toJson())
+const prettyPrintSgf = JSON.stringify(
+  sgfTreeAsJSON,
+  null,
+  2
+)
+const reSgf = sgfTrees.map((c) => c.toSgf()).join("")
+
+console.log(reSgf)

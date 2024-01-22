@@ -22,4 +22,22 @@ export class SgfTree {
   }
 
   // TODO: Stringify method, to transform it back to SGF.
+  toSgf(): string {
+    return (
+      this.data +
+      "(" +
+      this.children
+        .map((c) => c.toSgf())
+        .reduce((p, c) => p + c, "") +
+      ")"
+    )
+
+    // let sgf = this.data
+
+    // for (const child of this.children) {
+    //   sgf += child.toSgf()
+    // }
+
+    // return sgf
+  }
 }
