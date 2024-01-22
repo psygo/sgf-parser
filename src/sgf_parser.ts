@@ -184,6 +184,8 @@ const prettyPrintSgf = JSON.stringify(
   null,
   2
 )
-const reSgf = sgfTrees.map((c) => c.toSgf()).join("")
+const reSgf = sgfTrees
+  .map((c) => "(" + c.toSgf() + ")")
+  .join("")
 
 console.log(reSgf)

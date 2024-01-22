@@ -25,11 +25,13 @@ export class SgfTree {
   toSgf(): string {
     return (
       this.data +
-      "(" +
-      this.children
-        .map((c) => c.toSgf())
-        .reduce((p, c) => p + c, "") +
-      ")"
+      (this.children.length > 0
+        ? "(" +
+          this.children
+            .map((c) => c.toSgf())
+            .reduce((p, c) => p + c, "") +
+          ")"
+        : "")
     )
 
     // let sgf = this.data
