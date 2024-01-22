@@ -33,13 +33,5 @@ export class SgfTree {
           ")"
         : "")
     )
-
-    // let sgf = this.data
-
-    // for (const child of this.children) {
-    //   sgf += child.toSgf()
-    // }
-
-    // return sgf
   }
 }
