@@ -1,4 +1,6 @@
-import { SgfTree } from "./sgf_tree"
+import './array'
+
+import { SgfTree } from './sgf_tree'
 
 // An SGF tree is basically a *trie* data structure encoded
 // in text.
@@ -10,27 +12,27 @@ export function parseSgf(sgf: string) {
   // 1. Cleanup
   sgf = sgf
     .trim()
-    .replaceAll("\n", "")
-    .replaceAll("\t", "")
-    .replaceAll(" ", "")
+    .replaceAll('\n', '')
+    .replaceAll('\t', '')
+    .replaceAll(' ', '')
 
   // 2. Initialization
   const trees = new SgfTree()
   let currentTree: SgfTree = trees
-  let currentString: string = ""
+  let currentString: string = ''
 
   // 3. Flattened Recursion
   for (const char of sgf) {
     switch (char) {
-      case "(":
+      case '(':
         // 3.1. Opening a Branch
         currentTree.data = currentString
         const newTree = new SgfTree(currentTree)
         currentTree.children.push(newTree)
         currentTree = newTree
-        currentString = ""
+        currentString = ''
         break
-      case ")":
+      case ')':
         // 3.2. Closing the Current Branch and Going Back to the
         //      Parent.
         // parseMovesAndMetadata(currentString)
@@ -49,7 +51,7 @@ export function parseSgf(sgf: string) {
 // TODO: Complete, add all the fields.
 export type SgfData = {
   // 1. Metadata
-  GM?: "1" // Game Type (GM = "1" is Go)
+  GM?: '1' // Game Type (GM = "1" is Go)
   FF?: string // File Format
   CA?: string // Character Set
   AP?: string // Application used to produce the file
@@ -81,14 +83,14 @@ export type SgfData = {
 // TODO: Complete
 function parseMovesAndMetadata(sgfData: string) {
   const metadataAndMoves = sgfData
-    .split(";")
-    .filter((m) => m !== "")
+    .split(';')
+    .filter((m) => m !== '')
 
   const regex =
     /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g
   const matches = [...metadataAndMoves[0].matchAll(regex)]
 
-  console.log(matches[0].groups!["value"])
+  console.log(matches.first().groups!['value'])
 }
 
 // TODO: Put these into tests.
@@ -177,15 +179,46 @@ const test5 = `
   )
 `
 
+// Test 5 + Another Branch after the 2nd move
+const test6 = `
+  (
+    ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2024-01-21]
+    ;B[dd]
+    ;W[pd]
+      (
+        ;B[dp]
+      )
+      (
+        ;B[dq]
+          (
+            ;W[pp]
+          )
+          (
+            ;W[co]
+            ;B[pp]
+          )
+      )
+      (
+        ;B[jj]
+      )
+  )
+`
+
 const sgfTrees = parseSgf(test5)
+sgfTrees.first().add(new SgfTree(undefined, ';B[jj]'), {
+  down: 2,
+})
+sgfTrees.first().remove({ down: 2, right: 1 })
+
 const sgfTreeAsJSON = sgfTrees.map((c) => c.toJson())
 const prettyPrintSgf = JSON.stringify(
   sgfTreeAsJSON,
   null,
   2
 )
+
 const reSgf = sgfTrees
-  .map((c) => "(" + c.toSgf() + ")")
-  .join("")
+  .map((c) => '(' + c.toSgf() + ')')
+  .join('')
 
 console.log(reSgf)
