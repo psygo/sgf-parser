@@ -33,7 +33,7 @@ export function parseSgf(sgf: string) {
       case ")":
         // 3.2. Closing the Current Branch and Going Back to the
         //      Parent.
-        parseMovesAndMetadata(currentString)
+        // parseMovesAndMetadata(currentString)
         currentTree.data = currentString
         currentTree = currentTree.parent!
         currentString = currentTree.data
@@ -156,8 +156,8 @@ const test4 = `
   )
 `
 
-const sgf = parseSgf(test4)
-const sgfAsJSON = sgf.map((c) => c.toJson())
-const prettyPrintSgf = JSON.stringify(sgfAsJSON, null, 2)
+const sgfTree = parseSgf(test4)
+const sgfTreeAsJSON = sgfTree.map((c) => c.toJson())
+const prettyPrintSgf = JSON.stringify(sgfTreeAsJSON, null, 2)
 
-// console.log(prettyPrintSgf);
+console.log(prettyPrintSgf);
