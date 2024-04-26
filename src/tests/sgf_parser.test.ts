@@ -4,25 +4,6 @@ import { expect, test } from "vitest"
 
 import { SgfTree } from "../sgf_tree"
 
-// const sgfTrees = parseSgf(test5)
-// sgfTrees.first().add(new SgfTree(undefined, ";B[jj]"), {
-//   down: 2,
-// })
-// sgfTrees.first().remove({ down: 2, right: 1 })
-
-// const sgfTreeAsJSON = sgfTrees.map((c) => c.toJson())
-// const prettyPrintSgf = JSON.stringify(
-//   sgfTreeAsJSON,
-//   null,
-//   2
-// )
-
-// const reSgf = sgfTrees
-//   .map((c) => "(" + c.toSgf() + ")")
-//   .join("")
-
-// console.log(reSgf)
-
 test("1. Straight SGF with 1 branch and 4 nodes", () => {
   const sgfString = readFileSync(
     "./sgf/1_one_branch.sgf",
