@@ -31,6 +31,8 @@ test("1. Straight SGF with 1 branch and 4 nodes", () => {
 
   const sgfTrees = SgfTree.parseSgf(sgfString)
 
+  // console.log(sgfTrees.toJson())
+
   expect(sgfTrees.toSgf()).to.equal(sgfString)
 })
 
@@ -42,7 +44,9 @@ test("2. 2 Branches", () => {
 
   const sgfTrees = SgfTree.parseSgf(sgfString)
 
-  console.log(sgfTrees.toJson())
+  // console.log(sgfTrees.toJson())
+  console.log(sgfTrees.toPrettyJsonString())
+  console.log(sgfTrees.toSgf())
 
   expect(sgfTrees.toSgf()).to.equal(sgfString)
 })

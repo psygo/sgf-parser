@@ -1,17 +1,19 @@
+export type SgfString = string
+export type SgfBranchString = string
+
 /**
  * [CWI - SGF Format](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
  */
-export type SgfProperties =
+export type SgfProperties = (
   | RootNodeProperties
   | NodeProperties
+) & { [key: string]: string | string[] }
 
 export type RootNodeProperties = Partial<{
-  // 1.   Game Types
+  // 0. Game Types
   GM: string // Game Type (GM = "1" is Go)
 
-  // 2.   Root Node Properties
-
-  // 2.1. Players
+  // 1. Players
   PB: string // Black Player
   PW: string // White Player
   BR: string // Black's Rating
@@ -21,14 +23,14 @@ export type RootNodeProperties = Partial<{
   BT: string // Black's Team(s)
   WT: string // White's Team(s)
 
-  // 2.2. Event
+  // 2. Event
   EV: string // Event
   RO: string // Round
   DT: string // Date
   JT: string // Japanese Date
   PC: string // Place
 
-  // 2.3. Game Details
+  // 3. Game Details
   TM: string // Time available to each player
   OT: string // Overtime type and description
   LC: string // Number of overtimes
@@ -47,7 +49,7 @@ export type RootNodeProperties = Partial<{
   MN: string // Number of moves in the game
   GC: string // Game comments
 
-  // 2.4. Meta Properties
+  // 4. Meta Properties
   CA: string // Character Set
   FF: string // File Format
   AP: string // Application used to produce the file
@@ -59,9 +61,7 @@ export type RootNodeProperties = Partial<{
 }>
 
 export type NodeProperties = Partial<{
-  //   3. Node Properties
-
-  // 3.1. Move Properties
+  // 1. Move Properties
   B: string // What Black plays
   W: string // What White Plays
   C: string // (Move) Comments
@@ -70,7 +70,7 @@ export type NodeProperties = Partial<{
   OB: string // Number of Black stones that still need to be used in this period (Canadian byo-yomi).
   OW: string // Number of White stones that still need to be used in this period (Canadian byo-yomi). In Japanese byo-yomi, it's used to the number of remaining periods.
 
-  // 3.2. Markup Properties
+  // 2. Markup Properties
   SL: string[] // Selects a number of unnamed points
   CR: string[] // Circle
   SQ: string[] // Square
@@ -80,6 +80,6 @@ export type NodeProperties = Partial<{
   N: string // Names its node
   MN: string // Assigns a number to its node, probably for display purposes
 
-  // 3.3. Display Properties
+  // 3. Display Properties
   VW: string // The part of the board that should be viewed
 }>

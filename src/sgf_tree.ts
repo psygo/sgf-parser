@@ -1,5 +1,7 @@
 import "./array"
 
+import { SgfBranchString, type SgfString } from "./sgf"
+
 export type SgfTreeStringArray =
   | string
   | string[]
@@ -78,23 +80,27 @@ export class SgfTree {
   //--------------------------------------------------------
   // Parser
 
-  static parseSgf(sgf: string) {
-    // 1. Cleanup
-    sgf = sgf
+  static parseSgf(sgf: SgfString) {
+    return SgfTree.parseBranches(this.sgfCleanup(sgf))
+  }
+
+  private static sgfCleanup(sgf: SgfString) {
+    return sgf
       .trim()
       .replaceAll("\n", "")
       .replaceAll("\t", "")
       .replaceAll(" ", "")
+  }
 
-    // 2. Initialization
+  private static parseBranches(sgf: SgfString) {
     const trees = new SgfTree()
     let currentTree: SgfTree = trees
     let currentString = ""
 
-    // 3. Flattened Recursion
+    // Flattened Recursion
     for (const char of sgf) {
       switch (char) {
-        // 3.1. Opening a Branch
+        // 1. Opening a Branch
         case "(":
           currentTree.data = currentString
           const newTree = new SgfTree(currentTree)
@@ -102,11 +108,11 @@ export class SgfTree {
           currentTree = newTree
           currentString = ""
           break
-        // 3.2. Closing the Current Branch and Going Back to
-        //      the Parent.
+        // 2. Closing the Current Branch and Going Back to
+        //    the Parent.
         case ")":
-          // parseMovesAndMetadata(currentString)
           currentTree.data = currentString
+          this.parseBranch(currentTree)
           currentTree = currentTree.parent!
           currentString = currentTree.data
           break
@@ -118,30 +124,52 @@ export class SgfTree {
     return trees
   }
 
-  private parseMovesAndMetadata(sgfData: string) {
-    const metadataAndMoves = sgfData
+  private static parseBranch(tree: SgfTree) {
+    const children = tree.children
+
+    const nodesAsString = tree.data
       .split(";")
       .filter((m) => m !== "")
 
-    const regex =
-      /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g
-    const matches = [...metadataAndMoves[0].matchAll(regex)]
+    tree.data = nodesAsString.first()
+    const remaniningNodes = nodesAsString.slice(1)
+    let currentTree = tree
 
-    console.log(matches.first().groups!["value"])
+    for (const nodeData of remaniningNodes) {
+      const newChildren = new SgfTree(tree, nodeData)
+      currentTree.children = [newChildren]
+
+      currentTree = currentTree.children.first()
+    }
+
+    currentTree.children = children
   }
 
   //--------------------------------------------------------
   // `to` Methods
 
   toSgf(): string {
-    return (
-      this.data +
-      (this.children.notEmpty()
-        ? this.children
+    if (!this.parent)
+      return this.children
+        .map((c) => "(;" + c.toSgf() + ")")
+        .join()
+
+    if (this.children.notEmpty()) {
+      if (this.children.length === 1) {
+        return (
+          this.data + ";" + this.children.first().toSgf()
+        )
+      } else {
+        return (
+          this.data +
+          this.children
             .map((c) => c.toSgf())
-            .reduce((p, c) => p + "(" + c + ")", "")
-        : "")
-    )
+            .reduce((p, c) => p + "(;" + c + ")", "")
+        )
+      }
+    } else {
+      return this.data
+    }
   }
 
   toJson(): SgfTreeJson {
@@ -149,6 +177,10 @@ export class SgfTree {
       data: this.data,
       children: this.children.map((c) => c.toJson()),
     }
+  }
+
+  toPrettyJsonString(): string {
+    return JSON.stringify(this.toJson(), null, 2)
   }
 
   toArray(): SgfTreeStringArray[] {
