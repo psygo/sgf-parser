@@ -32,14 +32,14 @@ export class SgfTree {
     // The pointer to the parent isn't really necessary, but
     // it makes parsing much easier. It's a circular
     // reference though.
-    public parent?: SgfTree,
-    public children: SgfTree[] = [],
     public data: SgfProperties = {},
+    public children: SgfTree[] = [],
+    private parent?: SgfTree,
     private dataAsString: string = ""
   ) {
-    if (data && !dataAsString)
+    if (data && dataAsString === "")
       this.dataAsString = SgfTree.nodeDataToString(data)
-    else if (!data && dataAsString)
+    else if (dataAsString !== "")
       this.data = SgfTree.parseNodeData(dataAsString)
   }
 
@@ -60,9 +60,9 @@ export class SgfTree {
 
     parentRoot.children.push(
       new SgfTree(
-        parentRoot,
-        tree.children,
         {},
+        tree.children,
+        parentRoot,
         tree.dataAsString
       )
     )
@@ -70,7 +70,7 @@ export class SgfTree {
 
   private getDownToParent(down: number) {
     let currentRoot: SgfTree = this
-    const parentToTarget = down - 2
+    const parentToTarget = down + 1
 
     for (let i = 0; i < parentToTarget; i++)
       currentRoot = this.children.first()
@@ -114,7 +114,12 @@ export class SgfTree {
         // 1. Opening a Branch
         case "(":
           currentTree.dataAsString = currentString
-          const newTree = new SgfTree(currentTree)
+          const newTree = new SgfTree(
+            {},
+            [],
+            currentTree,
+            ""
+          )
           currentTree.children.push(newTree)
           currentTree = newTree
           currentString = ""
@@ -148,9 +153,9 @@ export class SgfTree {
 
     for (const nodeDataAsString of remaniningNodes) {
       const newChildren = new SgfTree(
-        tree,
-        [],
         this.parseNodeData(nodeDataAsString),
+        [],
+        tree,
         nodeDataAsString
       )
       currentTree.children = [newChildren]
@@ -165,8 +170,6 @@ export class SgfTree {
     const splitData = this.splitBrackets(nodeDataAsString)
     let currentKey = splitData.first()
     const nodeData: SgfProperties = {}
-
-    console.log(splitData)
 
     for (const c of splitData) {
       if (c.includes("[")) {

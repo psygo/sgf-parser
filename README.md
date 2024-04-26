@@ -4,10 +4,21 @@ An SGF is basically a text encoding of a tree data structure, and its grammar is
 
 ## Usage
 
+Basic parsing:
+
 ```ts
 import { SgfTree } from "../sgf_tree"
 
 const sgfTree = SgfTree.parseSgf("...")
+```
+
+Some useful methods:
+
+```ts
+tree.toSgf()
+tree.toJson()
+tree.toPrettyJsonString()
+tree.toArray()
 ```
 
 ## References
