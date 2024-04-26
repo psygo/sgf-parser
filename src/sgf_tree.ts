@@ -98,7 +98,6 @@ export class SgfTree {
       .trim()
       .replaceAll("\n", "")
       .replaceAll("\t", "")
-      .replaceAll(" ", "")
   }
 
   private static parseBranches(sgf: SgfString) {
@@ -164,6 +163,8 @@ export class SgfTree {
     let currentKey = splitData.first()
     const nodeData: SgfProperties = {}
 
+    console.log(splitData)
+
     for (const c of splitData) {
       if (c.includes("[")) {
         const newDatum = c.slice(1)
@@ -199,6 +200,7 @@ export class SgfTree {
           break
         case "]":
           split.push(currentString)
+          currentString = ""
           break
         default:
           currentString += c

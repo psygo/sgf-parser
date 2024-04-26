@@ -12,8 +12,6 @@ test("1. Straight SGF with 1 branch and 4 nodes", () => {
 
   const sgfTrees = SgfTree.parseSgf(sgfString)
 
-  // console.log(sgfTrees.toJson())
-
   expect(sgfTrees.toSgf()).to.equal(sgfString)
 })
 
@@ -25,105 +23,49 @@ test("2. 2 Branches", () => {
 
   const sgfTrees = SgfTree.parseSgf(sgfString)
 
-  // console.log(sgfTrees.toJson())
-  console.log(sgfTrees.toPrettyJsonString())
-  console.log(sgfTrees.toSgf())
+  expect(sgfTrees.toSgf()).to.equal(sgfString)
+})
+
+test("3. 2 Branches + Added (Edited) Stones", () => {
+  const sgfString = readFileSync(
+    "./sgf/3_two_branches_added_stones.sgf",
+    "utf-8"
+  )
+
+  const sgfTrees = SgfTree.parseSgf(sgfString)
 
   expect(sgfTrees.toSgf()).to.equal(sgfString)
 })
 
-// test("3. 2 Branches + Added (Edited) Stones", () => {
-//   const sgf = `
-//     (
-//       ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
-//       ;B[pd]
-//       ;W[dd]
-//         (
-//           ;B[pq]
-//           ;W[dp]
-//         )
-//         (
-//           ;B[dp]
-//           ;W[pp]
-//           ;PL[B]AE[jk]AB[jj]AW[ji]
-//           ;B[jq]
-//         )
-//     )
-//   `
+test("4. 2 Branches + Added (Edited) Stones + Comments", () => {
+  const sgfString = readFileSync(
+    "./sgf/4_two_branches_added_stones_comments.sgf",
+    "utf-8"
+  )
 
-//   const sgfTrees = parseSgf(sgf)
-// })
+  const sgfTrees = SgfTree.parseSgf(sgfString)
 
-// test("4. 2 Branches + Added (Edited) Stones + Comments", () => {
-//   const sgf = `
-//     (
-//       ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-12-25]
-//       ;B[pd]C[Comment on move.]
-//       ;W[dd]
-//         (
-//           ;B[pq]
-//           ;W[dp]
-//         )
-//         (
-//           ;B[dp]
-//           ;W[pp]
-//           ;PL[B]AE[jk]AB[jj]AW[ji]C[Comment on editing.]
-//           ;B[jq]
-//         )
-//     )
-//   `
+  expect(sgfTrees.toSgf()).to.equal(sgfString)
+})
 
-//   const sgfTrees = parseSgf(sgf)
-// })
+test("5. Nested Branches in 2 levels", () => {
+  const sgfString = readFileSync(
+    "./sgf/5_nested_branches_2_levels.sgf",
+    "utf-8"
+  )
 
-// test("5. Nested Branches in 2 levels", () => {
-//   const sgf = `
-//     (
-//       ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2024-01-21]
-//       ;B[dd]
-//       ;W[pd]
-//         (
-//           ;B[dp]
-//         )
-//         (
-//           ;B[dq]
-//             (
-//               ;W[pp]
-//             )
-//             (
-//               ;W[co];B[pp]
-//             )
-//         )
-//     )
-//   `
+  const sgfTrees = SgfTree.parseSgf(sgfString)
 
-//   const sgfTrees = parseSgf(sgf)
-// })
+  expect(sgfTrees.toSgf()).to.equal(sgfString)
+})
 
-// test("6. Test 5 + Another Branch after the 2nd move", () => {
-//   const sgf = `
-//     (
-//       ;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2024-01-21]
-//       ;B[dd]
-//       ;W[pd]
-//         (
-//           ;B[dp]
-//         )
-//         (
-//           ;B[dq]
-//             (
-//               ;W[pp]
-//             )
-//             (
-//               ;W[co]
-//               ;B[pp]
-//             )
-//         )
-//         (
-//           ;B[jj]
-//         )
-//     )
-//   `
+test("6. Test 5 + Another Branch after the 2nd move", () => {
+  const sgfString = readFileSync(
+    "./sgf/6_test_5_plus_another_branch_after_2nd_move.sgf",
+    "utf-8"
+  )
 
-//   const sgfTrees = parseSgf(sgf)
-// })
+  const sgfTrees = SgfTree.parseSgf(sgfString)
+
+  expect(sgfTrees.toSgf()).to.equal(sgfString)
+})
