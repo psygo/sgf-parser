@@ -9,20 +9,12 @@ export type SgfTreeStringArray =
 
 export type SgfTreeJson = {
   data: SgfProperties
-  dataAsString: string
   children: SgfTreeJson[]
 }
 
-// TODO: Maybe I should make these 0 based...
 export type TreeCoordinates = {
-  /**
-   * Bigger or equal than 1
-   */
   down: number
-  /**
-   * Bigger or equal than 1.
-   */
-  right?: number
+  right: number
 }
 
 export class SgfTree {
@@ -58,22 +50,31 @@ export class SgfTree {
       coordinates.down
     )
 
-    parentRoot.children.push(
-      new SgfTree(
-        {},
-        tree.children,
-        parentRoot,
-        tree.dataAsString
-      )
+    parentRoot.children.splice(
+      1,
+      0,
+      tree
     )
+    
+    console.log(parentRoot.toPrettyJsonString())
+
+    // parentRoot.children.push(
+    //   new SgfTree(
+    //     {},
+    //     newChildren,
+    //     parentRoot,
+    //     tree.dataAsString
+    //   )
+    // )
   }
 
   private getDownToParent(down: number) {
     let currentRoot: SgfTree = this
     const parentToTarget = down + 1
 
-    for (let i = 0; i < parentToTarget; i++)
-      currentRoot = this.children.first()
+    for (let i = 0; i < parentToTarget; i++) {
+      currentRoot = currentRoot.children.first()
+    }
 
     return currentRoot
   }
@@ -254,7 +255,6 @@ export class SgfTree {
   toJson(): SgfTreeJson {
     return {
       data: this.data,
-      dataAsString: this.dataAsString,
       children: this.children.map((c) => c.toJson()),
     }
   }
