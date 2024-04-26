@@ -37,7 +37,10 @@ export class SgfTree {
     public data: SgfProperties = {},
     private dataAsString: string = ""
   ) {
-    // if (data) this.dataAsString =
+    if (data && !dataAsString)
+      this.dataAsString = SgfTree.nodeDataToString(data)
+    else if (!data && dataAsString)
+      this.data = SgfTree.parseNodeData(dataAsString)
   }
 
   //--------------------------------------------------------
@@ -208,6 +211,12 @@ export class SgfTree {
     }
 
     return split
+  }
+
+  private static nodeDataToString(sgfProps: SgfProperties) {
+    return Object.entries(sgfProps)
+      .map(([k, v]) => `${k}[${v}]`)
+      .reduce((p, v) => p + v, "")
   }
 
   //--------------------------------------------------------
