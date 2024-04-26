@@ -1,6 +1,14 @@
 # SGF Parser
 
-An SGF is basically a text encoding of a tree data structure.
+An SGF is basically a text encoding of a tree data structure, and its grammar is described [here](https://homepages.cwi.nl/~aeb/go/misc/sgf.html).
+
+## Usage
+
+```ts
+import { SgfTree } from "../sgf_tree"
+
+const sgfTree = SgfTree.parseSgf("...")
+```
 
 ## References
 

@@ -1,9 +1,9 @@
 import "./array"
 
-export type SgfTreeString =
+export type SgfTreeStringArray =
   | string
   | string[]
-  | SgfTreeString[]
+  | SgfTreeStringArray[]
 
 export type SgfTreeJson = {
   data: string
@@ -23,6 +23,8 @@ export type TreeCoordinates = {
 }
 
 export class SgfTree {
+  //--------------------------------------------------------
+
   constructor(
     // The pointer to the parent isn't really necessary, but
     // it makes parsing much easier. It's a circular
@@ -31,6 +33,9 @@ export class SgfTree {
     public data: string = "",
     public children: SgfTree[] = []
   ) {}
+
+  //--------------------------------------------------------
+  // Changing the Tree
 
   /**
    * Checking if the coordinate is already occupied is *not*
@@ -70,6 +75,64 @@ export class SgfTree {
     }
   }
 
+  //--------------------------------------------------------
+  // Parser
+
+  static parseSgf(sgf: string) {
+    // 1. Cleanup
+    sgf = sgf
+      .trim()
+      .replaceAll("\n", "")
+      .replaceAll("\t", "")
+      .replaceAll(" ", "")
+
+    // 2. Initialization
+    const trees = new SgfTree()
+    let currentTree: SgfTree = trees
+    let currentString = ""
+
+    // 3. Flattened Recursion
+    for (const char of sgf) {
+      switch (char) {
+        // 3.1. Opening a Branch
+        case "(":
+          currentTree.data = currentString
+          const newTree = new SgfTree(currentTree)
+          currentTree.children.push(newTree)
+          currentTree = newTree
+          currentString = ""
+          break
+        // 3.2. Closing the Current Branch and Going Back to
+        //      the Parent.
+        case ")":
+          // parseMovesAndMetadata(currentString)
+          currentTree.data = currentString
+          currentTree = currentTree.parent!
+          currentString = currentTree.data
+          break
+        default:
+          currentString += char
+      }
+    }
+
+    return trees
+  }
+
+  private parseMovesAndMetadata(sgfData: string) {
+    const metadataAndMoves = sgfData
+      .split(";")
+      .filter((m) => m !== "")
+
+    const regex =
+      /(?<key>[A-Z](?:\s*[A-Z])*)\[(?<value>(?:\\\]|[^\]])*)/g
+    const matches = [...metadataAndMoves[0].matchAll(regex)]
+
+    console.log(matches.first().groups!["value"])
+  }
+
+  //--------------------------------------------------------
+  // `to` Methods
+
   toSgf(): string {
     return (
       this.data +
@@ -88,10 +151,12 @@ export class SgfTree {
     }
   }
 
-  toArray(): SgfTreeString[] {
+  toArray(): SgfTreeStringArray[] {
     return [
       this.data,
       this.children.map((c) => c.toArray()),
     ]
   }
+
+  //--------------------------------------------------------
 }

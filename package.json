@@ -1,7 +1,7 @@
 {
-  "name": "sgf-parser",
+  "name": "sgf-tree-parser",
   "version": "0.0.1",
-  "description": "My custom SGF parser",
+  "description": "A readable SGF tree and parser",
   "author": "Philippe Fanaro",
   "contributors": [
     {
@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "fs": "0.0.1-security",
-    "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vitest": "^1.5.2"
   }
