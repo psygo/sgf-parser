@@ -6,7 +6,7 @@ import { SgfTree } from "../sgf_tree"
 
 test("1. Straight SGF with 1 branch and 4 nodes", () => {
   const sgfString = readFileSync(
-    "./sgf/1_one_branch.sgf",
+    "./src/tests/sgf/1_one_branch.sgf",
     "utf-8"
   )
 
@@ -17,7 +17,7 @@ test("1. Straight SGF with 1 branch and 4 nodes", () => {
 
 test("2. 2 Branches", () => {
   const sgfString = readFileSync(
-    "./sgf/2_two_branches.sgf",
+    "./src/tests/sgf/2_two_branches.sgf",
     "utf-8"
   )
 
@@ -28,7 +28,7 @@ test("2. 2 Branches", () => {
 
 test("3. 2 Branches + Added (Edited) Stones", () => {
   const sgfString = readFileSync(
-    "./sgf/3_two_branches_added_stones.sgf",
+    "./src/tests/sgf/3_two_branches_added_stones.sgf",
     "utf-8"
   )
 
@@ -39,7 +39,7 @@ test("3. 2 Branches + Added (Edited) Stones", () => {
 
 test("4. 2 Branches + Added (Edited) Stones + Comments", () => {
   const sgfString = readFileSync(
-    "./sgf/4_two_branches_added_stones_comments.sgf",
+    "./src/tests/sgf/4_two_branches_added_stones_comments.sgf",
     "utf-8"
   )
 
@@ -50,7 +50,7 @@ test("4. 2 Branches + Added (Edited) Stones + Comments", () => {
 
 test("5. Nested Branches in 2 levels", () => {
   const sgfString = readFileSync(
-    "./sgf/5_nested_branches_2_levels.sgf",
+    "./src/tests/sgf/5_nested_branches_2_levels.sgf",
     "utf-8"
   )
 
@@ -61,7 +61,7 @@ test("5. Nested Branches in 2 levels", () => {
 
 test("6. Test 5 + Another Branch after the 2nd move", () => {
   const sgfString = readFileSync(
-    "./sgf/6_test_5_plus_another_branch_after_2nd_move.sgf",
+    "./src/tests/sgf/6_test_5_plus_another_branch_after_2nd_move.sgf",
     "utf-8"
   )
 

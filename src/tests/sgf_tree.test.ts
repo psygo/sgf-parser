@@ -6,7 +6,7 @@ import { SgfTree } from "../sgf_tree"
 
 test("1. Add a Node", () => {
   const sgfString = readFileSync(
-    "./sgf/5_nested_branches_2_levels.sgf",
+    "./src/tests/sgf/5_nested_branches_2_levels.sgf",
     "utf-8"
   )
 
@@ -23,7 +23,7 @@ test("1. Add a Node", () => {
 
 test("2. Remove a Node", () => {
   const sgfString = readFileSync(
-    "./sgf/5_nested_branches_2_levels.sgf",
+    "./src/tests/sgf/5_nested_branches_2_levels.sgf",
     "utf-8"
   )
 

@@ -1,4 +1,4 @@
-# SGF Parser
+# SGF Tree Parser
 
 An SGF is basically a text encoding of a tree data structure, and its grammar is described [here](https://homepages.cwi.nl/~aeb/go/misc/sgf.html).
 
