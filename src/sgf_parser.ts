@@ -2,12 +2,6 @@ import "./array"
 
 import { SgfTree } from "./sgf_tree"
 
-// An SGF tree is basically a *trie* data structure encoded
-// in text.
-//
-// I bet you could also do the whole parsing with only
-// Regexes. (I think I'm gonna create a Stack Overflow
-// question for this.)
 export function parseSgf(sgf: string) {
   // 1. Cleanup
   sgf = sgf
@@ -19,22 +13,22 @@ export function parseSgf(sgf: string) {
   // 2. Initialization
   const trees = new SgfTree()
   let currentTree: SgfTree = trees
-  let currentString: string = ""
+  let currentString = ""
 
   // 3. Flattened Recursion
   for (const char of sgf) {
     switch (char) {
+      // 3.1. Opening a Branch
       case "(":
-        // 3.1. Opening a Branch
         currentTree.data = currentString
         const newTree = new SgfTree(currentTree)
         currentTree.children.push(newTree)
         currentTree = newTree
         currentString = ""
         break
+      // 3.2. Closing the Current Branch and Going Back to
+      //      the Parent.
       case ")":
-        // 3.2. Closing the Current Branch and Going Back to the
-        //      Parent.
         // parseMovesAndMetadata(currentString)
         currentTree.data = currentString
         currentTree = currentTree.parent!
@@ -45,7 +39,7 @@ export function parseSgf(sgf: string) {
     }
   }
 
-  return trees.children
+  return trees
 }
 
 // TODO: Complete
