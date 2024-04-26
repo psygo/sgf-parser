@@ -20,13 +20,11 @@
   "private": true,
   "main": "exports.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "peggy": "^3.0.2"
+    "typescript": "^5.3.3",
+    "vitest": "^1.5.2"
   }
 }

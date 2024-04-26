@@ -1,6 +1,14 @@
-import './array'
+import "./array"
 
-export type Json = Object
+export type SgfTreeString =
+  | string
+  | string[]
+  | SgfTreeString[]
+
+export type SgfTreeJson = {
+  data: string
+  children: SgfTreeJson[]
+}
 
 // TODO: Maybe I should make these 0 based...
 export type TreeCoordinates = {
@@ -14,17 +22,13 @@ export type TreeCoordinates = {
   right?: number
 }
 
-// TODO: This should be its own package.
-// TODO: Since it uses a circular reference (`parent`),
-//       maybe then this should be just an intermediate
-//       tree.
 export class SgfTree {
   constructor(
     // The pointer to the parent isn't really necessary, but
     // it makes parsing much easier. It's a circular
     // reference though.
     public parent?: SgfTree,
-    public data: string = '',
+    public data: string = "",
     public children: SgfTree[] = []
   ) {}
 
@@ -72,15 +76,22 @@ export class SgfTree {
       (this.children.notEmpty()
         ? this.children
             .map((c) => c.toSgf())
-            .reduce((p, c) => p + '(' + c + ')', '')
-        : '')
+            .reduce((p, c) => p + "(" + c + ")", "")
+        : "")
     )
   }
 
-  toJson(): Json {
+  toJson(): SgfTreeJson {
     return {
       data: this.data,
       children: this.children.map((c) => c.toJson()),
     }
+  }
+
+  toArray(): SgfTreeString[] {
+    return [
+      this.data,
+      this.children.map((c) => c.toArray()),
+    ]
   }
 }
