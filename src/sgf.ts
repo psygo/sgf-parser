@@ -1,5 +1,4 @@
 export type SgfString = string
-export type SgfBranchString = string
 
 /**
  * [CWI - SGF Format](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
