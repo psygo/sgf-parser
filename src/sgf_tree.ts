@@ -51,7 +51,11 @@ export class SgfTree {
       coordinates.down
     )
     tree.parent = parentRoot
-    parentRoot.children.splice(coordinates.right - 1, 0, tree)
+    parentRoot.children.splice(
+      coordinates.right - 1,
+      0,
+      tree
+    )
   }
 
   private getDownToParent(down: number) {
@@ -69,10 +73,29 @@ export class SgfTree {
     const parentRoot = this.getDownToParent(
       coordinates.down
     )
-
     const right = coordinates.right
     if (right) {
       parentRoot.children.splice(right - 1, 1)
+    }
+  }
+
+  shift(
+    coordinates: TreeCoordinates,
+    left: boolean = false
+  ) {
+    const parentRoot = this.getDownToParent(
+      coordinates.down
+    )
+    const right = coordinates.right
+    const child = parentRoot.children[right - 1]
+    if (left) {
+      const leftChild = parentRoot.children[right - 2]
+      parentRoot.children[right - 2] = child
+      parentRoot.children[right - 1] = leftChild
+    } else {
+      const righChild = parentRoot.children[right]
+      parentRoot.children[right] = child
+      parentRoot.children[right - 1] = righChild
     }
   }
 

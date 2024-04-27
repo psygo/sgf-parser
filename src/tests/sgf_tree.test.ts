@@ -19,8 +19,6 @@ test("1. Add a Node", () => {
     right: 3,
   })
 
-  console.log(sgfTrees.toPrettyJsonString())
-
   const sgfStringAnswer = readFileSync(
     "./src/tests/sgf/7_two_branches_plus_one.sgf",
     "utf-8"
@@ -29,15 +27,38 @@ test("1. Add a Node", () => {
   expect(sgfTrees.toSgf()).to.equal(sgfStringAnswer)
 })
 
-// test("2. Remove a Node", () => {
-//   const sgfString = readFileSync(
-//     "./src/tests/sgf/5_nested_branches_2_levels.sgf",
-//     "utf-8"
-//   )
+test("2. Remove a Node", () => {
+  const sgfString = readFileSync(
+    "./src/tests/sgf/7_two_branches_plus_one.sgf",
+    "utf-8"
+  )
 
-//   const sgfTrees = SgfTree.parseSgf(sgfString)
+  const sgfTrees = SgfTree.parseSgf(sgfString)
 
-//   sgfTrees.children.first().remove({ down: 2, right: 1 })
+  sgfTrees.remove({ down: 3, right: 2 })
 
-//   expect("").to.equal("")
-// })
+  const sgfStringAnswer = readFileSync(
+    "./src/tests/sgf/8_three_branches_minus_one.sgf",
+    "utf-8"
+  )
+
+  expect(sgfTrees.toSgf()).to.equal(sgfStringAnswer)
+})
+
+test("3. Shift a Branch", () => {
+  const sgfString = readFileSync(
+    "./src/tests/sgf/7_two_branches_plus_one.sgf",
+    "utf-8"
+  )
+
+  const sgfTrees = SgfTree.parseSgf(sgfString)
+
+  sgfTrees.shift({ down: 3, right: 3 }, true)
+
+  const sgfStringAnswer = readFileSync(
+    "./src/tests/sgf/9_three_branches_shifted.sgf",
+    "utf-8"
+  )
+
+  expect(sgfTrees.toSgf()).to.equal(sgfStringAnswer)
+})
