@@ -1,6 +1,6 @@
 import "./array"
 
-import { SgfProperties, type SgfString } from "./sgf"
+import { type SgfProperties, type SgfString } from "./sgf"
 
 export type SgfTreeStringArray =
   | string

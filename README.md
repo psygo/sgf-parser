@@ -21,6 +21,23 @@ tree.toPrettyJsonString()
 tree.toArray()
 ```
 
+Typical SGF tree operations:
+
+```ts
+const newNode = new SgfTree({ B: "jj" }, [])
+
+sgfTrees.add(newNode, {
+  down: 3,
+  right: 3,
+})
+
+sgfTrees.remove({ down: 3, right: 2 })
+
+sgfTrees.shift({ down: 3, right: 3 }, true)
+```
+
+You can find out more about how to use these methods from the test files.
+
 ## References
 
 - [Go Pattern Search](https://github.com/psygo/go_pattern_search?tab=readme-ov-file)
