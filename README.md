@@ -12,6 +12,15 @@ import { SgfTree } from "../sgf_tree"
 const sgfTree = SgfTree.parseSgf("...")
 ```
 
+The tree's type is equivalent to this type in the end:
+
+```ts
+type SgfTree = {
+  data: SgfProperties
+  children: SgfTree[]
+}
+```
+
 Some useful methods:
 
 ```ts

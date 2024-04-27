@@ -9,7 +9,6 @@ export type SgfTreeStringArray =
 
 export type SgfTreeJson = {
   data: SgfProperties
-  dataAsString: string
   children: SgfTreeJson[]
 }
 
@@ -266,7 +265,6 @@ export class SgfTree {
   toJson(): SgfTreeJson {
     return {
       data: this.data,
-      dataAsString: this.dataAsString,
       children: this.children.map((c) => c.toJson()),
     }
   }
