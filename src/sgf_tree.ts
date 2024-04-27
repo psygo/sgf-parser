@@ -9,6 +9,7 @@ export type SgfTreeStringArray =
 
 export type SgfTreeJson = {
   data: SgfProperties
+  dataAsString: string
   children: SgfTreeJson[]
 }
 
@@ -49,24 +50,13 @@ export class SgfTree {
     const parentRoot = this.getDownToParent(
       coordinates.down
     )
-
-    parentRoot.children.splice(1, 0, tree)
-
-    // console.log(parentRoot.toPrettyJsonString())
-
-    // parentRoot.children.push(
-    //   new SgfTree(
-    //     {},
-    //     newChildren,
-    //     parentRoot,
-    //     tree.dataAsString
-    //   )
-    // )
+    tree.parent = parentRoot
+    parentRoot.children.splice(coordinates.right - 1, 0, tree)
   }
 
   private getDownToParent(down: number) {
     let currentRoot: SgfTree = this
-    const parentToTarget = down + 1
+    const parentToTarget = down
 
     for (let i = 0; i < parentToTarget; i++) {
       currentRoot = currentRoot.children.first()
@@ -140,7 +130,7 @@ export class SgfTree {
   }
 
   private static parseBranch(tree: SgfTree) {
-    const children = [...tree.children]
+    const children = tree.children
 
     const nodesAsString = tree.dataAsString
       .split(";")
@@ -253,6 +243,7 @@ export class SgfTree {
   toJson(): SgfTreeJson {
     return {
       data: this.data,
+      dataAsString: this.dataAsString,
       children: this.children.map((c) => c.toJson()),
     }
   }

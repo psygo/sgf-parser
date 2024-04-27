@@ -16,7 +16,7 @@ test("1. Add a Node", () => {
 
   sgfTrees.add(newNode, {
     down: 3,
-    right: 2,
+    right: 3,
   })
 
   console.log(sgfTrees.toPrettyJsonString())
@@ -26,7 +26,7 @@ test("1. Add a Node", () => {
     "utf-8"
   )
 
-  // expect(sgfTrees.toSgf()).to.equal(sgfStringAnswer)
+  expect(sgfTrees.toSgf()).to.equal(sgfStringAnswer)
 })
 
 // test("2. Remove a Node", () => {
