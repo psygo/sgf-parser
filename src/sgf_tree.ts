@@ -50,13 +50,9 @@ export class SgfTree {
       coordinates.down
     )
 
-    parentRoot.children.splice(
-      1,
-      0,
-      tree
-    )
-    
-    console.log(parentRoot.toPrettyJsonString())
+    parentRoot.children.splice(1, 0, tree)
+
+    // console.log(parentRoot.toPrettyJsonString())
 
     // parentRoot.children.push(
     //   new SgfTree(
@@ -105,8 +101,7 @@ export class SgfTree {
   }
 
   private static parseBranches(sgf: SgfString) {
-    const trees = new SgfTree()
-    let currentTree: SgfTree = trees
+    let currentTree: SgfTree = new SgfTree()
     let currentString = ""
 
     // Flattened Recursion
@@ -130,6 +125,9 @@ export class SgfTree {
         case ")":
           currentTree.dataAsString = currentString
           this.parseBranch(currentTree)
+          currentTree.data = this.parseNodeData(
+            currentTree.dataAsString
+          )
           currentTree = currentTree.parent!
           currentString = currentTree.dataAsString
           break
@@ -138,11 +136,11 @@ export class SgfTree {
       }
     }
 
-    return trees
+    return currentTree
   }
 
   private static parseBranch(tree: SgfTree) {
-    const children = tree.children
+    const children = [...tree.children]
 
     const nodesAsString = tree.dataAsString
       .split(";")
@@ -156,7 +154,7 @@ export class SgfTree {
       const newChildren = new SgfTree(
         this.parseNodeData(nodeDataAsString),
         [],
-        tree,
+        currentTree,
         nodeDataAsString
       )
       currentTree.children = [newChildren]
